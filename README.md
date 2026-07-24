@@ -1,5 +1,8 @@
 # Simple FastAPI Project
 
+> [!WARNING]
+> This project is currently under construction.
+
 This is a minimal FastAPI application.
 
 ## Files
