@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kaizen"
+version = "0.1.0"
+description = "A terminal-based AI coding agent"
+requires-python = ">=3.10"
+dependencies = [
+    "platformdirs",
+    "langchain-core",
+    "langchain-openai",
+    "langchain-community",
+    "chromadb",
+    "python-dotenv",
+    "pydantic",
+    "docker",
+    "tomlkit",
+    "typer",
+    "questionary",
+    "rich"
+]
+
+[project.scripts]
+kaizen = "kaizen.cli.app:app"
+
+[tool.setuptools.packages.find]
+include = ["kaizen*"]
