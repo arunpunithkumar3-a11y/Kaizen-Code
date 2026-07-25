@@ -1,8 +1,8 @@
 import os
 
 from kaizen.core.modules.agents.backend import ServiceClass
-from kaizen.core.modules.Schemas import FileInfo, ProjectSnapshot
-from utils import IGNORE_DIRS, IGNORE_EXTENSIONS, IGNORE_FILES
+from kaizen.core.modules.helper.Schemas import FileInfo, ProjectSnapshot
+from kaizen.core.modules.helper.utils import IGNORE_DIRS, IGNORE_EXTENSIONS, IGNORE_FILES
 
 
 class ScannerService(ServiceClass):

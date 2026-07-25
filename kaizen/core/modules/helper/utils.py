@@ -13,14 +13,12 @@ IGNORE_DIRS = [
     ".vscode",
     ".settings",
     ".vs",
-
     # Package Managers & Dependencies
     "node_modules",
     "bower_components",
     "vendor",
     "site-packages",
     "vendor/bundle",
-
     # Python Build/Cache/Test
     "__pycache__",
     ".venv",
@@ -32,7 +30,6 @@ IGNORE_DIRS = [
     "egg-info",
     "htmlcov",
     ".ipynb_checkpoints",
-
     # JS/TS Build/Cache
     "dist",
     "build",
@@ -42,7 +39,6 @@ IGNORE_DIRS = [
     ".svelte-kit",
     ".docusaurus",
     ".cache",
-
     # Rust / Java / C++ Build/Cache
     "target",
     ".gradle",
@@ -53,7 +49,6 @@ IGNORE_DIRS = [
     "ios/build",
     "android/build",
     ".expo",
-
     # General Output
     "coverage",
     "publish",
@@ -67,23 +62,18 @@ IGNORE_FILES = [
     ".env.production",
     ".env.development",
     ".env.test",
-
     # System files
     ".DS_Store",
     "Thumbs.db",
-
     # JS/TS Lockfiles
     "package-lock.json",
     "yarn.lock",
     "pnpm-lock.yaml",
-
     # Rust Lockfiles
     "Cargo.lock",
-
     # Ruby & PHP Lockfiles
     "Gemfile.lock",
     "composer.lock",
-    
     # TS Build Info
     "tsconfig.tsbuildinfo",
 ]
@@ -98,17 +88,14 @@ IGNORE_EXTENSIONS = [
     ".webp",
     ".ico",
     ".svg",
-    
     # Documents
     ".pdf",
-    
     # Archives & Zips
     ".zip",
     ".tar",
     ".gz",
     ".7z",
     ".rar",
-    
     # Executables & Binaries
     ".exe",
     ".dll",
@@ -116,22 +103,18 @@ IGNORE_EXTENSIONS = [
     ".bin",
     ".dmg",
     ".iso",
-    
     # Databases
     ".db",
     ".sqlite",
-    
     # Python Compiled
     ".pyc",
     ".pyo",
     ".pyd",
-
     # Java/Kotlin Compiled
     ".class",
     ".jar",
     ".war",
     ".ear",
-
     # C/C++ Compiled
     ".o",
     ".obj",
@@ -139,7 +122,6 @@ IGNORE_EXTENSIONS = [
     ".lib",
     ".out",
     ".dylib",
-
     # C#/.NET Compiled
     ".pdb",
     ".suo",

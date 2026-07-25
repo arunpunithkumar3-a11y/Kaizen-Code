@@ -5,6 +5,7 @@ from langgraph.prebuilt import ToolNode
 from kaizen.core.engine.state import KaizenState
 from kaizen.core.modules.agents.coder import CoderService
 from kaizen.core.modules.agents.scanner import ScannerService
+from kaizen.core.modules.helper.memory import memory_cleaner
 from kaizen.tools.file_tools.edit_file_tool import edit_file
 from kaizen.tools.file_tools.list_dir_tool import list_directory
 from kaizen.tools.file_tools.read_file_tool import read_file
@@ -68,4 +69,5 @@ def agent(state: KaizenState) -> dict:
     """
     LLM node. Primary autonomous reasoning loop.
     """
+    memory_cleaner(state)
     return coder_service.invoke(state)

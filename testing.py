@@ -3,34 +3,10 @@ import sys
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-os.environ["KAIZEN_PROVIDER"] = "nvidia"
-os.environ["KAIZEN_MODEL"] = "nvidia/nemotron-3-ultra-550b-a55b"
-os.environ["NVIDIA_API_KEY"] = (
-    "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"
-)
-
-
 from kaizen.core.engine.graph import builder
 
 query = """
-Build an AI Expense Tracker.
-
-Features:
-- Authentication
-- Dashboard
-- Income/Expense CRUD
-- Monthly analytics
-- Charts
-- AI insights using an LLM
-- CSV export
-- PDF reports
-- Categories
-- Search
-- Filters
-- REST API
-- React frontend
-- FastAPI backend
-- PostgreSQL
+hi bro can you build a good simple portfolio website job title AI engineer , name punith kumar A, projects Inbox os and Kaizen code in react js
 """
 
 
