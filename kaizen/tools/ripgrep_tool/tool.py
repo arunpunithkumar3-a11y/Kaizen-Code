@@ -70,7 +70,7 @@ def ripgrep(
         )
 
         if result.returncode == 1:
-            return []  # no matches
+            return []
 
         if result.returncode != 0:
             return {"error": f"Error executing ripgrep: {result.stderr.strip()}"}

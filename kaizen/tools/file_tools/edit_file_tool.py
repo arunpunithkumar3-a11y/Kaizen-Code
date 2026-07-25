@@ -1,9 +1,9 @@
-from pathlib import Path
 from typing import Annotated
 
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
 
+from kaizen.tools.file_tools.base import path_resolver
 from kaizen.tools.file_tools.schemas import EditFileInput
 
 
@@ -24,28 +24,7 @@ def edit_file(
         f"\n[Tool: Edit File] Modifying '{path}' (replacing a block of {len(old_text)} chars)..."
     )
     try:
-        workspace_path = Path(workspace).resolve()
-
-        requested_path = Path(path)
-
-        if requested_path.is_absolute():
-            try:
-                resolved_path = requested_path.resolve()
-
-                resolved_path.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
-
-        else:
-            resolved_path = (workspace_path / requested_path).resolve()
-
-            try:
-                resolved_path.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
-
+        resolved_path = path_resolver(workspace=workspace, path=path)
         if not resolved_path.exists():
             return f"Error: File '{path}' does not exist."
 

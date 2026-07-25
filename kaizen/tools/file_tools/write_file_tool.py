@@ -1,9 +1,9 @@
-from pathlib import Path
 from typing import Annotated
 
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
 
+from kaizen.tools.file_tools.base import path_resolver
 from kaizen.tools.file_tools.schemas import WriteFileInput
 
 
@@ -20,28 +20,7 @@ def write_file(
 
     print(f"\n[Tool: Write File] Writing '{path}' ({len(content)} chars)...")
     try:
-        workspace_path = Path(workspace).resolve()
-
-        requested_path = Path(path)
-
-        if requested_path.is_absolute():
-            try:
-                resolved_path = requested_path.resolve()
-
-                resolved_path.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
-
-        else:
-            resolved_path = (workspace_path / requested_path).resolve()
-
-            try:
-                resolved_path.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
-
+        resolved_path = path_resolver(workspace=workspace, path=path)
         resolved_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:

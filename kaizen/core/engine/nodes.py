@@ -35,6 +35,8 @@ def scanner(state: KaizenState) -> dict:
     """
     Scanner node. Scans the workspace directory and saves a snapshot to the state.
     """
+    if state.get("snapshot"):
+        return {}
     print("\n🔍 [Kaizen Scanner] Scanning project...")
     workspace = state.get("workspace", ".")
     scanner_service.root_dir = workspace

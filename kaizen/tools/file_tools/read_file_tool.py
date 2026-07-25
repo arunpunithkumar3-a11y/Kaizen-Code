@@ -1,9 +1,9 @@
-from pathlib import Path
 from typing import Annotated, Optional
 
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
 
+from kaizen.tools.file_tools.base import path_resolver
 from kaizen.tools.file_tools.schemas import ReadFileInput
 
 
@@ -19,32 +19,11 @@ def read_file(
     Only relative file paths inside the workspace are allowed.
     """
 
-    print(f"\n[Tool: Read File] Reading '{path}' (lines {start_line or 1} to {end_line or 'EOF'})...")
+    print(
+        f"\n[Tool: Read File] Reading '{path}' (lines {start_line or 1} to {end_line or 'EOF'})..."
+    )
     try:
-        workspace = workspace
-
-        workspace_path = Path(workspace).resolve()
-
-        requested_path = Path(path)
-
-        if requested_path.is_absolute():
-            try:
-                resolved_path = requested_path.resolve()
-
-                resolved_path.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
-
-        else:
-            resolved_path = (workspace_path / requested_path).resolve()
-
-            try:
-                resolved_path.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
-
+        resolved_path = path_resolver(workspace=workspace, path=path)
         if not resolved_path.exists():
             return f"Error: File '{path}' does not exist."
 

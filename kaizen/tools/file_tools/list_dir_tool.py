@@ -5,6 +5,7 @@ from typing import Annotated
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
 
+from kaizen.tools.file_tools.base import path_resolver
 from kaizen.tools.file_tools.schemas import ListDirectoryInput
 
 
@@ -21,26 +22,7 @@ def list_directory(
     print(f"\n[Tool: List Directory] Listing contents of directory '{path}'...")
     try:
         workspace_path = Path(workspace).resolve()
-
-        requested_path = Path(path)
-
-        if requested_path.is_absolute():
-            try:
-                resolved_dir = requested_path.resolve()
-
-                resolved_dir.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
-
-        else:
-            resolved_dir = (workspace_path / requested_path).resolve()
-
-            try:
-                resolved_dir.relative_to(workspace_path)
-
-            except ValueError:
-                return "Error: Access outside workspace is prohibited."
+        resolved_dir = path_resolver(workspace=workspace, path=path)
 
         if not resolved_dir.exists():
             return f"Error: Directory '{path}' does not exist."

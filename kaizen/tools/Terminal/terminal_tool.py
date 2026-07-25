@@ -50,26 +50,13 @@ def terminal(
 
     stderr = result.stderr.strip()
 
-    def truncate_middle(text: str, max_chars: int = 4000) -> str:
-
-        if len(text) <= max_chars:
-            return text
-
-        half = max_chars // 2
-
-        return (
-            text[:half]
-            + f"\n\n... [OUTPUT TRUNCATED: {len(text) - max_chars} characters hidden to save tokens] ...\n\n"
-            + text[-half:]
-        )
-
     output_parts = []
 
     if stdout:
-        output_parts.append(truncate_middle(stdout))
+        output_parts.append(stdout)
 
     if stderr:
-        output_parts.append("[Standard Error Output]:\n" + truncate_middle(stderr))
+        output_parts.append("[Standard Error Output]:\n" + stderr)
 
     combined_output = "\n\n".join(output_parts)
 
