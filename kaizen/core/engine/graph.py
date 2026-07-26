@@ -1,4 +1,4 @@
-from langgraph.checkpoint.memory import MemorySaver
+from kaizen.storage.sqlite import get_sqlite_checkpointer
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import tools_condition
 
@@ -29,5 +29,5 @@ workflow.add_conditional_edges(
 
 workflow.add_edge("tool_node", "agent")
 
-memory = MemorySaver()
-builder = workflow.compile(checkpointer=memory)
+checkpointer = get_sqlite_checkpointer()
+builder = workflow.compile(checkpointer=checkpointer)
