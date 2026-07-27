@@ -13,6 +13,7 @@ from kaizen.tools.file_tools.write_file_tool import write_file
 from kaizen.tools.ripgrep_tool.tool import ripgrep
 from kaizen.tools.Terminal.terminal_tool import terminal
 from kaizen.tools.todo.todo import write_todos
+from kaizen.tools.subagents.subagent_tool import subagent_tool
 
 # Developer Agent tools
 developer_tools = [
@@ -23,6 +24,7 @@ developer_tools = [
     ripgrep,
     terminal,
     write_todos,
+    subagent_tool,
 ]
 
 # Built-in LangGraph ToolNode instance, mapped to state's messages key

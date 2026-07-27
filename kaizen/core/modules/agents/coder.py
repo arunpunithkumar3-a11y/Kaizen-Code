@@ -11,6 +11,7 @@ from kaizen.tools.file_tools.list_dir_tool import list_directory
 from kaizen.tools.file_tools.read_file_tool import read_file
 from kaizen.tools.file_tools.write_file_tool import write_file
 from kaizen.tools.ripgrep_tool.tool import ripgrep
+from kaizen.tools.subagents.subagent_tool import subagent_tool
 from kaizen.tools.Terminal.terminal_tool import terminal
 from kaizen.tools.todo.todo import write_todos
 
@@ -36,6 +37,7 @@ class CoderService(ServiceClass):
             ripgrep,
             terminal,
             write_todos,
+            subagent_tool,
         ]
 
     def invoke(self, state: KaizenState) -> dict:

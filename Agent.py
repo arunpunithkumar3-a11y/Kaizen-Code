@@ -1,17 +1,7 @@
-import os
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langgraph.checkpoint.memory import InMemorySaver
+import inspect
 
-load_dotenv()
-
-LLM = ChatOpenAI(
-    model=os.getenv("KAIZEN_MODEL"),
-    api_key=os.getenv("NVIDIA_API_KEY"),
-    base_url="https://integrate.api.nvidia.com/v1",
-    temperature=1,
-    top_p=1,
-    max_completion_tokens=16384,
-)
-
-if __name__ == "__main__":
-    print(LLM.invoke("hi"))
+print(inspect.signature(InMemorySaver.put))
+print(inspect.signature(InMemorySaver.get_tuple))
+print(inspect.signature(InMemorySaver.list))
+print(inspect.signature(InMemorySaver.put_writes))

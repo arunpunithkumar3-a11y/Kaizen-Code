@@ -6,7 +6,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 from kaizen.core.engine.graph import builder
 
 query = """
-hi bro can you build a good simple portfolio website job title AI engineer , name punith kumar A, projects Inbox os and Kaizen code in react js
+thank you bro
 """
 
 
@@ -22,8 +22,9 @@ if __name__ == "__main__":
         {
             "messages": [HumanMessage(content=query)],
             "workspace": workspace_dir,
+
         },
-        config={"configurable": {"thread_id": "10"}},
+        config={"configurable": {"thread_id": "punith"}},
     )
 
     print(result["messages"][-1].content)
