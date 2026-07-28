@@ -1,10 +1,12 @@
+from concurrent.futures import ThreadPoolExecutor
 from typing import Annotated, List
 
+from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
 from pydantic import BaseModel, Field
 
-from kaizen.tools.subagents.subagents_nodes import subagents_graph
+from kaizen.tools.subagents.subagents_nodes import subagent_graph
 
 
 class SubAgentToolInput(BaseModel):
@@ -31,28 +33,29 @@ def subagent_tool(
         print(f"  - Task {idx + 1}: {t}")
 
     try:
-        # Invoke the coordinator graph synchronously
-        result = subagents_graph.invoke(
-            {
+
+        def run_worker(task: str):
+            state = {
+                "messages": [
+                    HumanMessage(
+                        content=f"Please execute the assigned subtask:\n{task}"
+                    )
+                ],
                 "workspace": workspace,
                 "snapshot": snapshot,
-                "tasks": tasks,
-                "reports": [],
+                "task": task,
+                "report": [],
             }
+            res = subagent_graph.invoke(state)
+            return res.get("report", [])
+
+        with ThreadPoolExecutor(max_workers=len(tasks)) as executor:
+            reports_lists = list(executor.map(run_worker, tasks))
+
+        return "\n\n".join(
+            f"### Subagent {idx + 1} Report (Task: {task}):\n{rep[-1].content if rep else ''}"
+            for idx, (task, rep) in enumerate(zip(tasks, reports_lists))
         )
-
-        reports = result.get("reports", [])
-        formatted_reports = []
-        for idx, report_msg in enumerate(reports):
-            # Extract content from report message
-            content = getattr(report_msg, "content", str(report_msg))
-            # Find which task this report belongs to
-            task_desc = tasks[idx] if idx < len(tasks) else "Unknown Task"
-            formatted_reports.append(
-                f"### Subagent {idx + 1} Report (Task: {task_desc}):\n{content}"
-            )
-
-        return "\n\n".join(formatted_reports)
 
     except Exception as e:
         import traceback

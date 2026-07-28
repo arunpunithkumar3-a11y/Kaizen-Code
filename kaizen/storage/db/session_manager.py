@@ -2,7 +2,7 @@ import uuid
 import json
 from pathlib import Path
 from datetime import datetime, UTC
-from paths import SESSIONS_DIR
+from kaizen.storage.paths import SESSIONS_DIR
 
 class SessionManager:
     def __init__(self):

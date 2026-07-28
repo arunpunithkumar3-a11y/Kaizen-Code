@@ -12,7 +12,3 @@ def get_llm():
         api_key=data["KAIZEN_API_KEY"],
     )
     return llm
-
-
-if __name__ == "__main__":
-    print(get_llm().invoke("hi"))

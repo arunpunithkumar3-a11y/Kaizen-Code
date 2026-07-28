@@ -1,8 +1,8 @@
 import os
 
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
 
+from kaizen.core.engine.llm import get_llm
 from kaizen.core.engine.state import KaizenState
 from kaizen.core.modules.agents.backend import ServiceClass
 from kaizen.core.modules.helper.prompts import SYSTEM_PROMPT
@@ -16,15 +16,6 @@ from kaizen.tools.Terminal.terminal_tool import terminal
 from kaizen.tools.todo.todo import write_todos
 
 load_dotenv()
-
-LLM = ChatOpenAI(
-    model=os.getenv("KAIZEN_MODEL"),
-    api_key=os.getenv("NVIDIA_API_KEY"),
-    base_url="https://integrate.api.nvidia.com/v1",
-    temperature=1,
-    top_p=1,
-    max_completion_tokens=16384,
-)
 
 
 class CoderService(ServiceClass):
@@ -43,7 +34,7 @@ class CoderService(ServiceClass):
     def invoke(self, state: KaizenState) -> dict:
         print("\n🤖 [Kaizen Agent] Thinking...")
         os.environ["WORKSPACE"] = state["workspace"]
-        llm = LLM
+        llm = get_llm()
 
         # Bind tools to LLM
         llm_with_tools = llm.bind_tools(self.tools)
