@@ -1,11 +1,19 @@
 import typer
 
+from kaizen.cli.commands.chat import chat
+from kaizen.cli.commands.config import config
+from kaizen.cli.commands.init import init
+from kaizen.cli.commands.resume import resume
 from kaizen.cli.commands.version import version
 
 app = typer.Typer(help="Kaizen Code - AI Coding Agent")
 
 
+app.command()(init)
 app.command()(version)
+app.command()(chat)
+app.command()(config)
+app.command()(resume)
 
 
 @app.callback(invoke_without_command=True)

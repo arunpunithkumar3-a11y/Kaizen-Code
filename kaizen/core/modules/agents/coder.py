@@ -1,5 +1,3 @@
-import os
-
 from dotenv import load_dotenv
 
 from kaizen.core.engine.llm import get_llm
@@ -33,7 +31,6 @@ class CoderService(ServiceClass):
 
     def invoke(self, state: KaizenState) -> dict:
         print("\n🤖 [Kaizen Agent] Thinking...")
-        os.environ["WORKSPACE"] = state["workspace"]
         llm = get_llm()
 
         # Bind tools to LLM

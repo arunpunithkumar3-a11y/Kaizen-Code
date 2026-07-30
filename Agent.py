@@ -1,18 +1,15 @@
-from langchain_openai import ChatOpenAI
+import questionary
+from questionary import Choice
 
-from kaizen.storage.config.config_manager import config_service
-
-
-def get_llm():
-    conifg_data = config_service.show_config()
-    data = conifg_data.get("config", "")
-    llm = ChatOpenAI(
-        base_url=data["KAIZEN_BASE_URL"],
-        model=data["KAIZEN_MODEL"],
-        api_key=data["KAIZEN_API_KEY"],
-    )
-    return llm
+from kaizen.storage.db.session_manager import session_service
 
 
-if __name__ == "__main__":
-    print(get_llm().invoke("hi"))
+def resume():
+    data = [
+        Choice(y["title"], value=x) for x, y in session_service.list_sessions().items()
+    ]
+    thread_id = questionary.select("Choose Chats", choices=data).ask()
+    print(thread_id)
+
+
+resume()

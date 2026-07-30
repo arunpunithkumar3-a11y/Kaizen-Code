@@ -21,7 +21,8 @@ def ripgrep(
     On error, returns a dict with 'error' key.
     """
 
-    print(f"\n[Tool: Ripgrep] Searching for pattern '{pattern}' in workspace...")
+    from rich.console import Console
+    Console().print(f"\n[bold #ffaf5f]Search:[/bold #ffaf5f] [white]{pattern}[/white]")
     try:
         workspace_path = Path(workspace).resolve()
 

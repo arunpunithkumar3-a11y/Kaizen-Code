@@ -1,8 +1,9 @@
-import uuid
 import json
-from pathlib import Path
-from datetime import datetime, UTC
+import uuid
+from datetime import UTC, datetime
+
 from kaizen.storage.paths import SESSIONS_DIR
+
 
 class SessionManager:
     def __init__(self):
@@ -10,8 +11,7 @@ class SessionManager:
         self.index_file = SESSIONS_DIR / "index.json"
         if not self.index_file.exists():
             self.index_file.write_text(
-                json.dumps({"sessions": {}}, indent=2),
-                encoding="utf-8"
+                json.dumps({"sessions": {}}, indent=2), encoding="utf-8"
             )
 
     def _load_index(self) -> dict:
@@ -29,10 +29,7 @@ class SessionManager:
         now = datetime.now(UTC).isoformat()
 
         index_data = self._load_index()
-        index_data["sessions"][thread_id] = {
-            "title": title,
-            "created_at": now
-        }
+        index_data["sessions"][thread_id] = {"title": title, "created_at": now}
         self._save_index(index_data)
 
         return thread_id
@@ -56,3 +53,6 @@ class SessionManager:
         self._save_index(index_data)
 
         return True
+
+
+session_service = SessionManager()

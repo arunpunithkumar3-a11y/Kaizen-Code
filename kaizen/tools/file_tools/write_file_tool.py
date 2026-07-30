@@ -18,7 +18,8 @@ def write_file(
     Only relative file paths inside the workspace are allowed.
     """
 
-    print(f"\n[Tool: Write File] Writing '{path}' ({len(content)} chars)...")
+    from rich.console import Console
+    Console().print(f"\n[bold #00ff87]File write:[/bold #00ff87] [white]{path}[/white]")
     try:
         resolved_path = path_resolver(workspace=workspace, path=path)
         resolved_path.parent.mkdir(parents=True, exist_ok=True)

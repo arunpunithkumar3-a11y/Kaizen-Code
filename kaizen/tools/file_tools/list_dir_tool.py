@@ -19,7 +19,8 @@ def list_directory(
     Filters out ignored folders (.git, node_modules, etc.) to optimize tokens.
     """
 
-    print(f"\n[Tool: List Directory] Listing contents of directory '{path}'...")
+    from rich.console import Console
+    Console().print(f"\n[bold #5f87ff]Directory list:[/bold #5f87ff] [white]{path}[/white]")
     try:
         workspace_path = Path(workspace).resolve()
         resolved_dir = path_resolver(workspace=workspace, path=path)

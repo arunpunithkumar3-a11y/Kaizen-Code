@@ -20,9 +20,8 @@ def edit_file(
     The old_text must match the current file contents exactly.
     """
 
-    print(
-        f"\n[Tool: Edit File] Modifying '{path}' (replacing a block of {len(old_text)} chars)..."
-    )
+    from rich.console import Console
+    Console().print(f"\n[bold #00d7ff]File edit:[/bold #00d7ff] [white]{path}[/white]")
     try:
         resolved_path = path_resolver(workspace=workspace, path=path)
         if not resolved_path.exists():

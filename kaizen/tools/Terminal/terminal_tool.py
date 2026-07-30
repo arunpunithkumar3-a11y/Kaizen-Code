@@ -18,7 +18,8 @@ def terminal(
     DO NOT execute long-running background servers (e.g. uvicorn, flask run, npm start) as terminal execution is synchronous.
     """
 
-    print(f"\n[Tool: Terminal] Executing command: {command}")
+    from rich.console import Console
+    Console().print(f"\n[bold #8a8a8a]System command:[/bold #8a8a8a] [white]{command}[/white]")
 
     try:
         workspace_path = Path(workspace).resolve()

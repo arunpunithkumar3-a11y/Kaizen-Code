@@ -28,9 +28,11 @@ def subagent_tool(
     Each subagent operates on the codebase independently and returns its final task report.
     The tool returns the consolidated reports from all spawned subagents.
     """
-    print(f"\n[Tool: SubAgent] Spawning {len(tasks)} subagents in parallel...")
+    from rich.console import Console
+    console = Console()
+    console.print(f"\n[bold #875fdf]Subagents:[/bold #875fdf] Spawning {len(tasks)} subagents in parallel...")
     for idx, t in enumerate(tasks):
-        print(f"  - Task {idx + 1}: {t}")
+        console.print(f"  [bold #875fdf]•[/bold #875fdf] Task {idx + 1}: [white]{t}[/white]")
 
     try:
 

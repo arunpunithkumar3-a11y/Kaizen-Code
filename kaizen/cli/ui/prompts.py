@@ -1,7 +1,9 @@
 import questionary
-from kaizen.config.constants import PROVIDERS
+# from kaizen.config.constants import PROVIDERS
+PROVIDERS = {}
 
 from kaizen.cli.ui.styles import QUESTIONARY_STYLE
+
 
 
 def prompt_provider() -> str:

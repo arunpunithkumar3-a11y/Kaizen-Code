@@ -1,4 +1,4 @@
-from kaizen.storage.sqlite import get_sqlite_checkpointer
+from kaizen.storage.db.sqlite import get_sqlite_checkpointer
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import tools_condition
 

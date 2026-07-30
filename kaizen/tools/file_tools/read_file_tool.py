@@ -19,9 +19,8 @@ def read_file(
     Only relative file paths inside the workspace are allowed.
     """
 
-    print(
-        f"\n[Tool: Read File] Reading '{path}' (lines {start_line or 1} to {end_line or 'EOF'})..."
-    )
+    from rich.console import Console
+    Console().print(f"\n[bold #5f87ff]File read:[/bold #5f87ff] [white]{path}[/white] (lines {start_line or 1} to {end_line or 'EOF'})")
     try:
         resolved_path = path_resolver(workspace=workspace, path=path)
         if not resolved_path.exists():
