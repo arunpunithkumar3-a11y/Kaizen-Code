@@ -12,6 +12,7 @@ from kaizen.tools.ripgrep_tool.tool import ripgrep
 from kaizen.tools.subagents.subagent_tool import subagent_tool
 from kaizen.tools.Terminal.terminal_tool import terminal
 from kaizen.tools.todo.todo import write_todos
+from kaizen.tools.web_search_tool.tool import web_search_tool
 
 load_dotenv()
 
@@ -27,10 +28,10 @@ class CoderService(ServiceClass):
             terminal,
             write_todos,
             subagent_tool,
+            web_search_tool,
         ]
 
     def invoke(self, state: KaizenState) -> dict:
-        print("\n🤖 [Kaizen Agent] Thinking...")
         llm = get_llm()
 
         # Bind tools to LLM

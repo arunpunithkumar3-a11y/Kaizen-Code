@@ -1,46 +1,67 @@
-from pathlib import Path
-
-import questionary
-from langchain_core.messages import HumanMessage
-from prompt_toolkit import PromptSession
-from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from prompt_toolkit.formatted_text import HTML
-from prompt_toolkit.history import FileHistory
-from questionary import Choice
-from rich.console import Console
-
-from kaizen.cli.ui import panels
-from kaizen.cli.ui.styles import QUESTIONARY_STYLE
-from kaizen.core.engine.graph import builder
-from kaizen.storage.db.session_manager import session_service
-from kaizen.storage.paths import KAIZEN_HOME
-
-console = Console()
-
-
 def resume():
-    data = [
-        Choice(y["title"], value=x) for x, y in session_service.list_sessions().items()
-    ]
+    import questionary
+    from questionary import Choice
+    from kaizen.cli.ui import panels
+    from kaizen.cli.ui.styles import QUESTIONARY_STYLE
+    from kaizen.storage.db.session_manager import session_service
+
+    # Display elegant header containing active environment details
+    panels.show_banner()
+
+    sessions = session_service.list_sessions()
+    if not sessions:
+        panels.info("No active chat sessions found to resume.")
+        return
+
+    sorted_sessions = sorted(
+        sessions.items(), key=lambda item: item[1].get("created_at", ""), reverse=True
+    )
+
+    from datetime import datetime
+
+    max_title_len = min(
+        40, max((len(y.get("title", "")) for y in sessions.values()), default=20)
+    )
+
+    choice_data = []
+    for x, y in sorted_sessions:
+        title = y.get("title", "Untitled")
+        if len(title) > max_title_len:
+            title_display = title[: max_title_len - 3] + "..."
+        else:
+            title_display = title.ljust(max_title_len)
+
+        created_at_str = y.get("created_at")
+        if created_at_str:
+            try:
+                dt_utc = datetime.fromisoformat(created_at_str)
+                dt_local = dt_utc.astimezone()
+                time_str = dt_local.strftime("%Y-%m-%d %H:%M")
+            except Exception:
+                time_str = "Unknown Date"
+        else:
+            time_str = "Unknown Date"
+
+        display_name = f"{title_display}  ({time_str})"
+        choice_data.append(Choice(display_name, value=x))
+
     thread_id = questionary.select(
-        "Choose Chats", choices=data, style=QUESTIONARY_STYLE
+        "Select a chat session to resume:",
+        choices=choice_data,
+        style=QUESTIONARY_STYLE,
+        qmark="  ❖",
+        pointer="❯",
     ).ask()
+    
     if thread_id is None:
         return
 
-    history_file = KAIZEN_HOME / "history.txt"
-    history_file.parent.mkdir(parents=True, exist_ok=True)
-    session = PromptSession(history=FileHistory(str(history_file)))
+    panels.console.print()
 
     while True:
         try:
-            query = session.prompt(
-                HTML(
-                    "<style fg='#875fdf'><b>kaizen</b></style><style fg='#00d7ff'><b> &gt; </b></style>"
-                ),
-                auto_suggest=AutoSuggestFromHistory(),
-            ).strip()
-        except (KeyboardInterrupt, EOFError):
+            query = panels.custom_input().strip()
+        except KeyboardInterrupt:
             break
 
         if not query:
@@ -48,14 +69,5 @@ def resume():
         if query == "exit":
             break
 
-        with console.status("[bold #875fdf]Thinking...[/bold #875fdf]"):
-            result = builder.invoke(
-                {
-                    "messages": [HumanMessage(content=query)],
-                    "workspace": Path.cwd(),
-                },
-                config={"configurable": {"thread_id": thread_id}},
-            )
-
-        content = result["messages"][-1].content
-        panels.parse_and_render_agent_message(content)
+        panels.console.print()
+        panels.execute_agent(thread_id, query)

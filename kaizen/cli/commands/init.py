@@ -1,11 +1,10 @@
-from rich.console import Console
-
+from kaizen.cli.ui import panels
 from kaizen.storage.manager import storage_manager
-
-console = Console()
 
 
 def init():
-    console.print("[bold #875fdf]Initializing Kaizen Code...[/bold #875fdf]")
+    panels.show_banner()
+    panels.log_action("Planning", "Initializing Kaizen Code storage...")
     storage_manager.initialize()
-    console.print("[bold #00ff87]Initialization Complete[/bold #00ff87]")
+    panels.success("Initialization complete.")
+

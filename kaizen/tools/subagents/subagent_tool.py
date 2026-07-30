@@ -28,15 +28,16 @@ def subagent_tool(
     Each subagent operates on the codebase independently and returns its final task report.
     The tool returns the consolidated reports from all spawned subagents.
     """
-    from rich.console import Console
-    console = Console()
-    console.print(f"\n[bold #875fdf]Subagents:[/bold #875fdf] Spawning {len(tasks)} subagents in parallel...")
+    from kaizen.cli.ui import panels
+    panels.log_tool_start("Subagents", f"Spawning {len(tasks)} parallel subtasks")
     for idx, t in enumerate(tasks):
-        console.print(f"  [bold #875fdf]•[/bold #875fdf] Task {idx + 1}: [white]{t}[/white]")
+        panels.log_action(f"Subtask {idx + 1}", t)
 
     try:
 
         def run_worker(task: str):
+            from kaizen.cli.ui.panels import thread_local
+            thread_local.is_subagent = True
             state = {
                 "messages": [
                     HumanMessage(
@@ -54,6 +55,7 @@ def subagent_tool(
         with ThreadPoolExecutor(max_workers=len(tasks)) as executor:
             reports_lists = list(executor.map(run_worker, tasks))
 
+        panels.log_tool_end("Subagents", f"Completed {len(tasks)} parallel subtasks", success=True)
         return "\n\n".join(
             f"### Subagent {idx + 1} Report (Task: {task}):\n{rep[-1].content if rep else ''}"
             for idx, (task, rep) in enumerate(zip(tasks, reports_lists))
@@ -63,4 +65,5 @@ def subagent_tool(
         import traceback
 
         traceback.print_exc()
+        panels.log_tool_end("Subagents", f"Failed to execute parallel subtasks", success=False)
         return f"Error executing subagents: {str(e)}"

@@ -16,6 +16,7 @@ from kaizen.tools.ripgrep_tool.tool import ripgrep
 from kaizen.tools.subagents.subagent_state import KaizenSubAgentState, KaizenWorkerState
 from kaizen.tools.Terminal.terminal_tool import terminal
 from kaizen.tools.todo.todo import write_todos
+from kaizen.tools.web_search_tool.tool import web_search_tool
 
 load_dotenv()
 
@@ -38,6 +39,7 @@ developer_tools = [
     ripgrep,
     terminal,
     write_todos,
+    web_search_tool,
 ]
 
 

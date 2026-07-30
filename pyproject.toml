@@ -19,7 +19,8 @@ dependencies = [
     "tomlkit",
     "typer",
     "questionary",
-    "rich"
+    "rich",
+    "duckduckgo-search"
 ]
 
 [project.scripts]

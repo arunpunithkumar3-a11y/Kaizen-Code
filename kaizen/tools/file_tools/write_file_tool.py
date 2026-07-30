@@ -18,19 +18,24 @@ def write_file(
     Only relative file paths inside the workspace are allowed.
     """
 
-    from rich.console import Console
-    Console().print(f"\n[bold #00ff87]File write:[/bold #00ff87] [white]{path}[/white]")
+    from kaizen.cli.ui import panels
+    panels.log_tool_start("Writing", path)
     try:
         resolved_path = path_resolver(workspace=workspace, path=path)
         resolved_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:
             resolved_path.write_text(content, encoding="utf-8")
-
         except Exception as e:
-            return f"Error writing file '{path}': {str(e)}"
+            err_msg = f"Error writing file '{path}': {str(e)}"
+            panels.log_tool_end("Wrote", path, success=False, details="write error")
+            return err_msg
 
+        lines_count = len(content.splitlines())
+        panels.log_tool_end("Wrote", path, success=True, details=f"{lines_count} lines")
         return "OK"
 
     except Exception as e:
-        return f"Error: An unexpected error occurred: {str(e)}"
+        err_msg = f"Error: An unexpected error occurred: {str(e)}"
+        panels.log_tool_end("Wrote", path, success=False, details="error")
+        return err_msg

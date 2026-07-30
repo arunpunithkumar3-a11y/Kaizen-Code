@@ -12,6 +12,8 @@ def prompt_provider() -> str:
         "🤖 Select your LLM provider:",
         choices=list(PROVIDERS.keys()),
         style=QUESTIONARY_STYLE,
+        qmark="  ❖",
+        pointer="❯",
     ).ask()
 
     if provider is None:
@@ -25,6 +27,7 @@ def prompt_model(provider: str) -> str:
     model = questionary.text(
         f"⚙️ Enter LLM model for {provider}:",
         style=QUESTIONARY_STYLE,
+        qmark="  ❖",
     ).ask()
 
     if model is None:
@@ -43,6 +46,7 @@ def prompt_api_key(provider: str) -> str | None:
     api_key = questionary.password(
         f"🔑 Enter your {provider} API key:",
         style=QUESTIONARY_STYLE,
+        qmark="  ❖",
     ).ask()
 
     if api_key is None:
@@ -56,6 +60,7 @@ def confirm(message: str) -> bool:
     result = questionary.confirm(
         f"❓ {message}",
         style=QUESTIONARY_STYLE,
+        qmark="  ❖",
     ).ask()
 
     if result is None:

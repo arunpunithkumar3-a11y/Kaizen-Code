@@ -3,33 +3,44 @@ from rich.theme import Theme
 
 KAIZEN_THEME = Theme(
     {
-        "banner": "bold #875fdf",
-        "brand": "bold #875fdf",
-        "accent": "bold #00d7ff",
-        "success": "#00ff87",
-        "success_bold": "bold #00ff87",
-        "error": "#ff5f87",
-        "error_bold": "bold #ff5f87",
-        "warning": "#ffaf5f",
-        "warning_bold": "bold #ffaf5f",
-        "info": "#5f87ff",
-        "info_bold": "bold #5f87ff",
-        "muted": "#8a8a8a",
-        "muted_bold": "bold #8a8a8a",
+        "banner": "bold #7c3aed",
+        "brand": "bold #7c3aed",
+        "accent": "bold #6366f1",
+        "success": "#10b981",
+        "success_bold": "bold #10b981",
+        "error": "#ef4444",
+        "error_bold": "bold #ef4444",
+        "warning": "#f59e0b",
+        "warning_bold": "bold #f59e0b",
+        "info": "#3b82f6",
+        "info_bold": "bold #3b82f6",
+        "muted": "#6c7086",
+        "muted_bold": "bold #6c7086",
+        
+        # Markdown theme overrides
+        "markdown.h1": "bold #7c3aed",
+        "markdown.h2": "bold #6366f1",
+        "markdown.h3": "bold #3b82f6",
+        "markdown.h4": "bold #b4befe",
+        "markdown.code": "bold #6366f1",
+        "markdown.block_quote": "italic #6c7086",
+        "markdown.item": "white",
+        "markdown.link": "underline #3b82f6",
+        "markdown.link_text": "underline #3b82f6",
     }
 )
 
 
 QUESTIONARY_STYLE = Style(
     [
-        ("qmark", "fg:#875fdf bold"),
+        ("qmark", "fg:#7c3aed bold"),
         ("question", "bold fg:#ffffff"),
-        ("answer", "fg:#00ff87 bold"),
-        ("pointer", "fg:#00d7ff bold"),
-        ("highlighted", "fg:#00d7ff bold"),
-        ("selected", "fg:#00ff87 bold"),
-        ("separator", "fg:#8a8a8a"),
-        ("instruction", "fg:#8a8a8a italic"),
+        ("answer", "fg:#10b981 bold"),
+        ("pointer", "fg:#a78bfa bold"),
+        ("highlighted", "fg:#ffffff bg:#7c3aed bold"),
+        ("selected", "fg:#10b981 bold"),
+        ("separator", "fg:#6c7086"),
+        ("instruction", "fg:#6c7086 italic"),
         ("text", "fg:#ffffff"),
         ("disabled", "fg:#5f5f5f italic"),
     ]

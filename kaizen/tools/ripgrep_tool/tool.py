@@ -21,15 +21,17 @@ def ripgrep(
     On error, returns a dict with 'error' key.
     """
 
-    from rich.console import Console
-    Console().print(f"\n[bold #ffaf5f]Search:[/bold #ffaf5f] [white]{pattern}[/white]")
+    from kaizen.cli.ui import panels
+    panels.log_tool_start("Searching", pattern)
     try:
         workspace_path = Path(workspace).resolve()
 
         if not shutil.which("rg"):
-            return {
+            err_res = {
                 "error": "ripgrep ('rg') executable is not installed or not in PATH."
             }
+            panels.log_tool_end("Searched", pattern, success=False, details="no rg bin")
+            return err_res
 
         result = subprocess.run(
             [
@@ -71,10 +73,13 @@ def ripgrep(
         )
 
         if result.returncode == 1:
+            panels.log_tool_end("Searched", pattern, success=True, details="0 matches")
             return []
 
         if result.returncode != 0:
-            return {"error": f"Error executing ripgrep: {result.stderr.strip()}"}
+            err_res = {"error": f"Error executing ripgrep: {result.stderr.strip()}"}
+            panels.log_tool_end("Searched", pattern, success=False, details="rg error")
+            return err_res
 
         matches = []
         MAX_TOTAL_MATCHES = 50
@@ -118,10 +123,15 @@ def ripgrep(
 
             matches.append({"file": file_rel, "line": line_number, "text": text})
 
+        panels.log_tool_end("Searched", pattern, success=True, details=f"{len(matches)} matches")
         return json.dumps(matches)
 
     except subprocess.TimeoutExpired:
-        return {"error": "ripgrep command timed out."}
+        err_res = {"error": "ripgrep command timed out."}
+        panels.log_tool_end("Searched", pattern, success=False, details="timeout")
+        return err_res
 
     except Exception as e:
-        return {"error": f"Unexpected error: {str(e)}"}
+        err_res = {"error": f"Unexpected error: {str(e)}"}
+        panels.log_tool_end("Searched", pattern, success=False, details="error")
+        return err_res
