@@ -509,30 +509,38 @@ class AgentStreamRenderer:
             and not self.fallback
         ):
             status_manager.stop()
+            is_tty = False
             try:
-                self.live = Live(
-                    self.get_renderable(),
-                    console=console,
-                    auto_refresh=True,
-                    refresh_per_second=8,
-                    vertical_overflow="visible",
-                )
-                self.live.start()
+                is_tty = sys.stdout.isatty()
             except Exception:
+                pass
+            if not console.is_terminal or not is_tty:
+                self.fallback = True
+            else:
                 try:
                     self.live = Live(
                         self.get_renderable(),
                         console=console,
                         auto_refresh=True,
                         refresh_per_second=8,
+                        transient=True,
                     )
                     self.live.start()
                 except Exception:
                     self.fallback = True
 
         if self.live:
-            self.live.update(self.get_renderable())
-        else:
+            try:
+                self.live.update(self.get_renderable())
+            except Exception:
+                try:
+                    self.live.stop()
+                except Exception:
+                    pass
+                self.live = None
+                self.fallback = True
+
+        if not self.live:
             if self.thought_text:
                 if not self.thought_header_printed:
                     console.print("\n[bold #7c3aed]❖ Thinking Process:[/bold #7c3aed]")
@@ -580,6 +588,7 @@ class AgentStreamRenderer:
             except Exception:
                 pass
             self.live = None
+            parse_and_render_agent_message(self.buffer)
         else:
             status_manager.stop()
             if self.fallback:
