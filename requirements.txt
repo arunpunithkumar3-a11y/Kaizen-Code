@@ -11,4 +11,4 @@ typer>=0.9.0
 questionary>=2.0.0
 rich>=13.0.0
 duckduckgo-search>=6.0.0
-python-ripgrep>=0.2.0
+python-ripgrep>=0.0.8
