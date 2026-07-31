@@ -5,7 +5,7 @@ from kaizen.storage.paths import CONFIG_DIR
 
 class ConfigManager:
     def __init__(self):
-        CONFIG_DIR.mkdir(exist_ok=True)
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         self.config_file = CONFIG_DIR / "settings.json"
         if not self.config_file.exists():
             self.config_file.write_text(

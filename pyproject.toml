@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kaizen-code"
-version = "0.1.1"
+version = "0.1.2"
 description = "A terminal-based autonomous AI coding agent designed to run loops, execute shell commands, locate, inspect, modify, and verify code."
 readme = "README.md"
 requires-python = ">=3.10"

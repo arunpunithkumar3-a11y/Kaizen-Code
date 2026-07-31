@@ -7,7 +7,7 @@ from kaizen.storage.paths import SESSIONS_DIR
 
 class SessionManager:
     def __init__(self):
-        SESSIONS_DIR.mkdir(exist_ok=True)
+        SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
         self.index_file = SESSIONS_DIR / "index.json"
         if not self.index_file.exists():
             self.index_file.write_text(
