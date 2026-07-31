@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kaizen"
+name = "kaizen-code"
 version = "0.1.0"
 description = "A terminal-based autonomous AI coding agent designed to run loops, execute shell commands, locate, inspect, modify, and verify code."
 readme = "README.md"
