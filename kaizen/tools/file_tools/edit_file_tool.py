@@ -75,6 +75,10 @@ def edit_file(
         panels.log_tool_end("Edited", path, success=True)
         return "OK"
 
+    except PermissionError as e:
+        err_msg = f"Error: {str(e)}"
+        panels.log_tool_end("Edited", path, success=False, details="permission error")
+        return err_msg
     except Exception as e:
         err_msg = f"Error: An unexpected error occurred: {str(e)}"
         panels.log_tool_end("Edited", path, success=False, details="error")

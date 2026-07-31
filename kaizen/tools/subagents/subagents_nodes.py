@@ -2,11 +2,11 @@ import os
 
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
-from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.types import Send
 
+from kaizen.core.engine.llm import get_llm
 from kaizen.core.modules.helper.prompts import SUBAGENT_SYSTEM_PROMPT
 from kaizen.tools.file_tools.edit_file_tool import edit_file
 from kaizen.tools.file_tools.list_dir_tool import list_directory
@@ -21,16 +21,6 @@ from kaizen.tools.web_search_tool.tool import web_search_tool
 load_dotenv()
 
 
-LLM = ChatOpenAI(
-    model=os.getenv("KAIZEN_MODEL"),
-    api_key=os.getenv("NVIDIA_API_KEY"),
-    base_url="https://integrate.api.nvidia.com/v1",
-    temperature=1,
-    top_p=1,
-    max_completion_tokens=16384,
-)
-
-
 developer_tools = [
     read_file,
     write_file,
@@ -42,13 +32,13 @@ developer_tools = [
     web_search_tool,
 ]
 
-
 tool_node = ToolNode(developer_tools, messages_key="messages")
-llm_with_tools = LLM.bind_tools(developer_tools)
 
 
 def subagent(state: KaizenWorkerState):
     os.environ["WORKSPACE"] = state["workspace"]
+    llm = get_llm()
+    llm_with_tools = llm.bind_tools(developer_tools)
     chain = SUBAGENT_SYSTEM_PROMPT | llm_with_tools
     result = chain.invoke(
         {

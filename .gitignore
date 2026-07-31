@@ -1,4 +1,43 @@
-.venv
-.env
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python Cache & Compiled files
 __pycache__/
-.vscode
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Local configuration files
+.env
+.env.*
+
+# Databases & runtime state
+*.db
+*.sqlite
+checkpoints.db
+sessions/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Packaging and Build artifacts
+build/
+dist/
+*.egg-info/
+egg-info/

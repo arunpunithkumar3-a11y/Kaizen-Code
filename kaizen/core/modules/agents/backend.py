@@ -3,6 +3,5 @@ from abc import ABC, abstractmethod
 
 class ServiceClass(ABC):
     @abstractmethod
-    def invoke():
-
+    def invoke(self, *args, **kwargs):
         pass

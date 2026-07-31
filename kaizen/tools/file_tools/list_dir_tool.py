@@ -95,6 +95,10 @@ def list_directory(
         panels.log_tool_end("Listed", path, success=True, details=f"{len(entries)} items")
         return "\n".join(entries)
 
+    except PermissionError as e:
+        err_msg = f"Error: {str(e)}"
+        panels.log_tool_end("Listed", path, success=False, details="permission error")
+        return err_msg
     except Exception as e:
         err_msg = f"Error: An unexpected error occurred: {str(e)}"
         panels.log_tool_end("Listed", path, success=False, details="error")

@@ -19,7 +19,6 @@ from kaizen.tools.todo.todo import write_todos
 from kaizen.tools.web_search_tool.tool import web_search_tool
 
 DANGEROUS_TOOLS = ["edit_file", "write_file", "terminal"]
-# Developer Agent tools
 developer_tools = [
     read_file,
     write_file,
@@ -32,8 +31,21 @@ developer_tools = [
     web_search_tool,
 ]
 
-# Built-in LangGraph ToolNode instance, mapped to state's messages key
-tool_node = ToolNode(developer_tools, messages_key="messages")
+original_tool_node = ToolNode(developer_tools, messages_key="messages")
+
+def tool_node(state: KaizenState) -> dict:
+    import json
+    result = original_tool_node.invoke(state)
+    new_todos = None
+    for msg in result.get("messages", []):
+        if isinstance(msg, ToolMessage) and (msg.name == "write_todos" or msg.name.endswith("write_todos")):
+            try:
+                new_todos = json.loads(msg.content)
+            except Exception:
+                pass
+    if new_todos is not None:
+        result["todos"] = new_todos
+    return result
 
 coder_service = CoderService()
 scanner_service = ScannerService()
@@ -84,8 +96,25 @@ def agent(state: KaizenState) -> dict:
     """
     LLM node. Primary autonomous reasoning loop.
     """
-    memory_cleaner(state)
-    return coder_service.invoke(state)
+    updates = memory_cleaner(state)
+    if updates:
+        if "messages" in updates:
+            clean_messages = [msg for msg in updates["messages"] if not msg.type == "remove"]
+            state["messages"] = clean_messages
+        if "summary" in updates:
+            state["summary"] = updates["summary"]
+
+    response_updates = coder_service.invoke(state)
+
+    combined_updates = {}
+    if updates:
+        combined_updates.update(updates)
+        combined_messages = list(updates.get("messages", [])) + list(response_updates.get("messages", []))
+        combined_updates["messages"] = combined_messages
+    else:
+        combined_updates = response_updates
+
+    return combined_updates
 
 
 def approval_node(state: KaizenState):

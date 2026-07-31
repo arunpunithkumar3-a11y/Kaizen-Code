@@ -29,7 +29,7 @@ def web_search_tool(
                     "link": r.get("href"),
                     "snippet": r.get("body")
                 })
-        
+
         panels.log_tool_end("Searched", f"web: {query}", success=True, details=f"{len(results)} results")
         return json.dumps(results, indent=2)
     except Exception as e:

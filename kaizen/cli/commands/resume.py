@@ -1,11 +1,11 @@
 def resume():
     import questionary
     from questionary import Choice
+
     from kaizen.cli.ui import panels
     from kaizen.cli.ui.styles import QUESTIONARY_STYLE
     from kaizen.storage.db.session_manager import session_service
 
-    # Display elegant header containing active environment details
     panels.show_banner()
 
     sessions = session_service.list_sessions()
@@ -52,7 +52,7 @@ def resume():
         qmark="  ❖",
         pointer="❯",
     ).ask()
-    
+
     if thread_id is None:
         return
 

@@ -13,4 +13,4 @@ def path_resolver(workspace: str, path: str) -> Path:
     if resolved_path.is_relative_to(workspace_path):
         return resolved_path
     else:
-        return "Access outside workspace is prohibited."
+        raise PermissionError("Access outside workspace is prohibited.")

@@ -1,10 +1,10 @@
 def chat():
     import questionary
+
     from kaizen.cli.ui import panels
     from kaizen.cli.ui.styles import QUESTIONARY_STYLE
     from kaizen.storage.db.session_manager import session_service
 
-    # Display elegant header containing active environment details
     panels.show_banner()
 
     title = questionary.text(
@@ -19,8 +19,9 @@ def chat():
     title = title.strip()
     if not title:
         from datetime import datetime
+
         title = f"Chat {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-        
+
     thread_id = session_service.create(title=title)
     panels.console.print()
 

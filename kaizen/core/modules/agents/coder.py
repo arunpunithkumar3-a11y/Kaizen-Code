@@ -34,10 +34,8 @@ class CoderService(ServiceClass):
     def invoke(self, state: KaizenState) -> dict:
         llm = get_llm()
 
-        # Bind tools to LLM
         llm_with_tools = llm.bind_tools(self.tools)
 
-        # Construct and invoke LCEL chain
         chain = SYSTEM_PROMPT | llm_with_tools
         response = chain.invoke(
             {

@@ -35,6 +35,10 @@ def write_file(
         panels.log_tool_end("Wrote", path, success=True, details=f"{lines_count} lines")
         return "OK"
 
+    except PermissionError as e:
+        err_msg = f"Error: {str(e)}"
+        panels.log_tool_end("Wrote", path, success=False, details="permission error")
+        return err_msg
     except Exception as e:
         err_msg = f"Error: An unexpected error occurred: {str(e)}"
         panels.log_tool_end("Wrote", path, success=False, details="error")

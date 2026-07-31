@@ -1,0 +1,14 @@
+platformdirs>=4.0.0
+langchain-core>=0.2.0
+langchain-openai>=0.1.0
+langchain-community>=0.2.0
+chromadb>=0.4.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+docker>=6.0.0
+tomlkit>=0.12.0
+typer>=0.9.0
+questionary>=2.0.0
+rich>=13.0.0
+duckduckgo-search>=6.0.0
+python-ripgrep>=0.2.0

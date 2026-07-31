@@ -15,16 +15,21 @@ from kaizen.core.engine.state import KaizenState
 load_dotenv()
 
 
-LLM = ChatOpenAI(
-    model=os.getenv("KAIZEN_MODEL"),
-    api_key=os.getenv("NVIDIA_API_KEY"),
-    base_url="https://integrate.api.nvidia.com/v1",
-    temperature=1,
-    top_p=1,
-    max_completion_tokens=16384,
-)
+def get_memory_llm():
+    try:
+        from kaizen.core.engine.llm import get_llm
+        return get_llm()
+    except Exception:
+        return ChatOpenAI(
+            model=os.getenv("KAIZEN_MODEL") or "nvidia/nemotron-3-ultra-550b-a55b",
+            api_key=os.getenv("NVIDIA_API_KEY") or os.getenv("KAIZEN_API_KEY"),
+            base_url="https://integrate.api.nvidia.com/v1",
+            temperature=1,
+            top_p=1,
+            max_completion_tokens=16384,
+        )
 
-INITIAL_SUMMARY_PROMPT = """You are a memory consolidation module for an AI software engineering agent. 
+INITIAL_SUMMARY_PROMPT = """You are a memory consolidation module for an AI software engineering agent.
 Your task is to analyze the following sequence of conversation events and generate a concise, structured Markdown summary of what has been done so far.
 
 Focus only on:
@@ -74,7 +79,6 @@ def memory_cleaner(state: KaizenState):
             events_lines.append(f"User: {msg.content}")
 
         elif isinstance(msg, AIMessage):
-            # Capture tool usage intention if present
             if hasattr(msg, "tool_calls") and msg.tool_calls:
                 tools = ", ".join([tc["name"] for tc in msg.tool_calls])
                 events_lines.append(f"Agent initiated tools: [{tools}]")
@@ -84,7 +88,6 @@ def memory_cleaner(state: KaizenState):
     new_events = "\n".join(events_lines)
     existing_summary = state.get("summary", "")
 
-    # Run LLM summarization if there are events to compile
     if not new_events.strip():
         new_summary = existing_summary
     else:
@@ -96,7 +99,8 @@ def memory_cleaner(state: KaizenState):
             )
 
         try:
-            response = LLM.invoke(prompt)
+            llm = get_memory_llm()
+            response = llm.invoke(prompt)
             new_summary = response.content.strip()
         except Exception as e:
             print(f"⚠️ [Memory Cleaner] Warning: Summarizer call failed: {e}")

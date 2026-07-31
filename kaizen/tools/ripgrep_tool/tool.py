@@ -1,6 +1,4 @@
 import json
-import shutil
-import subprocess
 from pathlib import Path
 from typing import Annotated
 
@@ -22,116 +20,84 @@ def ripgrep(
     """
 
     from kaizen.cli.ui import panels
+
     panels.log_tool_start("Searching", pattern)
     try:
-        workspace_path = Path(workspace).resolve()
+        import os
 
-        if not shutil.which("rg"):
-            err_res = {
-                "error": "ripgrep ('rg') executable is not installed or not in PATH."
-            }
-            panels.log_tool_end("Searched", pattern, success=False, details="no rg bin")
-            return err_res
+        import python_ripgrep
 
-        result = subprocess.run(
-            [
-                "rg",
-                "--json",
-                "-n",
-                "--smart-case",
-                "--hidden",
-                "--glob",
-                "!.git",
-                "--glob",
-                "!node_modules",
-                "--glob",
-                "!dist",
-                "--glob",
-                "!build",
-                "--glob",
-                "!coverage",
-                "--glob",
-                "!venv",
-                "--glob",
-                "!.venv",
-                "--glob",
-                "!__pycache__",
-                "--glob",
-                "!egg-info",
-                "--glob",
-                "!kaizen.egg-info",
-                "--max-count",
-                "30",
-                pattern,
-                str(workspace_path),
-            ],
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=30,
+        globs_list = [
+            "!.git",
+            "!node_modules",
+            "!dist",
+            "!build",
+            "!coverage",
+            "!venv",
+            "!.venv",
+            "!__pycache__",
+            "!egg-info",
+            "!kaizen.egg-info",
+        ]
+
+        results = python_ripgrep.search(
+            patterns=[pattern],
+            paths=[os.path.abspath(workspace)],
+            globs=globs_list,
+            line_number=True,
+            heading=True,
         )
 
-        if result.returncode == 1:
-            panels.log_tool_end("Searched", pattern, success=True, details="0 matches")
-            return []
-
-        if result.returncode != 0:
-            err_res = {"error": f"Error executing ripgrep: {result.stderr.strip()}"}
-            panels.log_tool_end("Searched", pattern, success=False, details="rg error")
-            return err_res
-
-        matches = []
+        main_data = []
+        total_matches = 0
         MAX_TOTAL_MATCHES = 50
+        truncated = False
 
-        for idx, line in enumerate(result.stdout.splitlines()):
-            if idx >= MAX_TOTAL_MATCHES:
-                matches.append(
-                    {
-                        "file": None,
-                        "line": None,
-                        "text": f"... (further matches truncated. Total capped at {MAX_TOTAL_MATCHES})",
-                    }
-                )
+        for line in results:
+            if not line.strip():
+                continue
+            if total_matches >= MAX_TOTAL_MATCHES:
+                truncated = True
                 break
 
-            try:
-                event = json.loads(line)
-            except json.JSONDecodeError:
+            data = line.splitlines()
+            if not data:
                 continue
+            path = data[0]
+            metadata = []
 
-            if event.get("type") != "match":
-                continue
+            for d in data[1:]:
+                if total_matches >= MAX_TOTAL_MATCHES:
+                    truncated = True
+                    break
 
-            data = event.get("data", {})
-            path = data.get("path", {}).get("text")
-            line_number = data.get("line_number")
-            text = data.get("lines", {}).get("text", "").strip()
+                m = d.split(":", 1)
+                line_number = m[0]
+                text = m[1]
 
-            if not path or not line_number:
-                continue
+                metadata.append({"line_number": line_number, "text": text})
+                total_matches += 1
 
-            try:
-                file_rel = str(
-                    Path(path).resolve().relative_to(workspace_path)
-                ).replace("\\", "/")
-            except Exception:
-                file_rel = path
+            main_data.append({"file": str(Path(path).resolve()), "metadata": metadata})
 
-            if len(text) > 120:
-                text = text[:120] + "..."
+        if truncated:
+            main_data.append(
+                {
+                    "file": None,
+                    "metadata": [
+                        {
+                            "line_number": None,
+                            "text": f"... (further matches truncated. Total capped at {MAX_TOTAL_MATCHES})",
+                        }
+                    ],
+                }
+            )
 
-            matches.append({"file": file_rel, "line": line_number, "text": text})
-
-        panels.log_tool_end("Searched", pattern, success=True, details=f"{len(matches)} matches")
-        return json.dumps(matches)
-
-    except subprocess.TimeoutExpired:
-        err_res = {"error": "ripgrep command timed out."}
-        panels.log_tool_end("Searched", pattern, success=False, details="timeout")
-        return err_res
+        panels.log_tool_end(
+            "Searched", pattern, success=True, details=f"{total_matches} matches"
+        )
+        return json.dumps(main_data)
 
     except Exception as e:
-        err_res = {"error": f"Unexpected error: {str(e)}"}
         panels.log_tool_end("Searched", pattern, success=False, details="error")
-        return err_res
+        return {"error": str(e)}

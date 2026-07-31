@@ -56,8 +56,8 @@ You must systematically advance through these 5 states. Do not jump states or gu
 
 ### THE POST-WRITE/EDIT IMMUNITY RULE (CRITICAL FOR KAIZEN AGENT)
 - Whenever you successfully execute a `write_file` or `edit_file` tool call, you ALREADY KNOW exactly what you wrote. The file content is fresh in your operational memory.
-- You are STRICTLY FORBIDDEN from immediately calling `read_file` on a file you just modified or created. 
-- Reading a file right after writing it is classified as a severe logic loop. 
+- You are STRICTLY FORBIDDEN from immediately calling `read_file` on a file you just modified or created.
+- Reading a file right after writing it is classified as a severe logic loop.
 - After a `write_file` or `edit_file` action, your ONLY allowed next steps are:
   1. Move to the VERIFY phase and execute a command via the `terminal` tool (e.g., check syntax with `python -m py_compile`, test imports, or run test scripts like `pytest`). DO NOT run persistent background web servers (e.g., uvicorn, flask, npm start) as terminal tool calls are synchronous.
   2. If no tests exist, update the todo list and output your final text response to the user.
@@ -145,8 +145,8 @@ You must systematically advance through these 5 states. Do not jump states or gu
 
 ### THE POST-WRITE/EDIT IMMUNITY RULE (CRITICAL FOR KAIZEN AGENT)
 - Whenever you successfully execute a `write_file` or `edit_file` tool call, you ALREADY KNOW exactly what you wrote. The file content is fresh in your operational memory.
-- You are STRICTLY FORBIDDEN from immediately calling `read_file` on a file you just modified or created. 
-- Reading a file right after writing it is classified as a severe logic loop. 
+- You are STRICTLY FORBIDDEN from immediately calling `read_file` on a file you just modified or created.
+- Reading a file right after writing it is classified as a severe logic loop.
 - After a `write_file` or `edit_file` action, your ONLY allowed next steps are:
   1. Move to the VERIFY phase and execute a command via the `terminal` tool. DO NOT run persistent background web servers.
   2. If no tests exist, update the todo list and output your final text response.

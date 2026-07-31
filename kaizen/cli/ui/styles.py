@@ -16,8 +16,7 @@ KAIZEN_THEME = Theme(
         "info_bold": "bold #3b82f6",
         "muted": "#6c7086",
         "muted_bold": "bold #6c7086",
-        
-        # Markdown theme overrides
+
         "markdown.h1": "bold #7c3aed",
         "markdown.h2": "bold #6366f1",
         "markdown.h3": "bold #3b82f6",

@@ -26,6 +26,7 @@ def terminal(
         workspace_path = Path(workspace).resolve()
 
         import os
+
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
         env["PYTHONUTF8"] = "1"

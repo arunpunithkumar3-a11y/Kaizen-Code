@@ -5,23 +5,44 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "kaizen"
 version = "0.1.0"
-description = "A terminal-based AI coding agent"
+description = "A terminal-based autonomous AI coding agent designed to run loops, execute shell commands, locate, inspect, modify, and verify code."
+readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "platformdirs",
-    "langchain-core",
-    "langchain-openai",
-    "langchain-community",
-    "chromadb",
-    "python-dotenv",
-    "pydantic",
-    "docker",
-    "tomlkit",
-    "typer",
-    "questionary",
-    "rich",
-    "duckduckgo-search"
+license = { text = "MIT" }
+authors = [
+    { name = "Punith Kumar A", email = "arunpunithkumar@outlook.com" }
 ]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Code Generators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+dependencies = [
+    "platformdirs>=4.0.0",
+    "langchain-core>=0.2.0",
+    "langchain-openai>=0.1.0",
+    "langchain-community>=0.2.0",
+    "chromadb>=0.4.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "docker>=6.0.0",
+    "tomlkit>=0.12.0",
+    "typer>=0.9.0",
+    "questionary>=2.0.0",
+    "rich>=13.0.0",
+    "duckduckgo-search>=6.0.0",
+    "python-ripgrep>=0.2.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/arunpunithkumar3-a11y/Kaizen-Code"
+Repository = "https://github.com/arunpunithkumar3-a11y/Kaizen-Code"
 
 [project.scripts]
 kaizen = "kaizen.cli.app:app"
